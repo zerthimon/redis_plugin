@@ -1,0 +1,16 @@
+clients			connected:GAUGE:0:U, blocked:GAUGE:0:U
+connected_slaves	value:GAUGE:0:U
+redis_connections	rejected:COUNTER:0:U, received:COUNTER:0:U
+redis_keys		expired:GAUGE:0:U, evicted:GAUGE:0:U
+keyspace		misses:COUNTER:0:U, hits:COUNTER:0:U
+last_save		rdb_time_sec:GAUGE:0:U, aof_time_sec:GAUGE:0:U, rdb_changes_since:GAUGE:0:U
+redis_memory		used:GAUGE:0:U, used_lua:GAUGE:0:U, used_peak:GAUGE:0:U, used_rss:GAUGE:0:U, fragmentation_ratio:GAUGE:0:U
+commands_per_sec	value:GAUGE:0:U
+pubsub			channels:GAUGE:0:U, patterns:GAUGE:0:U
+uptime_in_seconds	value:GAUGE:0:U
+cpu_used		user_children:DERIVE:0:U, sys:DERIVE:0:U, sys_children:DERIVE:0:U, user:DERIVE:0:U
+expires			value:GAUGE:0:U
+total			value:GAUGE:0:U
+avg_ttl			value:GAUGE:0:U
+calls			value:COUNTER:0:U
+usec_per_call		value:GAUGE:0:U
