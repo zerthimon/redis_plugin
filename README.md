@@ -78,9 +78,9 @@ Multi-instance Plugin Config Example:
               Commandstats false
           </Instance>
           <Instance redis2>
-              IP "127.0.0.1:
+              IP "127.0.0.1"
               Port 6379
-              Auth "fubared"
+              Auth "foobared"
               Commandstats true
           </Instance>
           Verbose false
