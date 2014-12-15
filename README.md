@@ -17,11 +17,11 @@ Options:
 -------
 * `Socket`  
    Path to a UNIX Domain socket of the Redis instance.  
-   When specified, takes over Ip and Port options.  
    Default: none  
 * `IP`  
    IP Address of the Redis instance.  
-   Default: none  
+   When specified together with Socket, takes over Socket option.
+   Default: 127.0.0.1
 * `Port`  
    TCP Port of the Redis instance.  
    Default: 6379  
@@ -35,7 +35,7 @@ Options:
    Provide verbose logging of plugin operation in the Collectd's log.  
    Default: false  
 * `Instance`  
-   There are situations when multiple instances of Redis needs to run on the same host. This option opens an Instance block. 
+   There are situations when multiple instances of Redis need to run on the same host. This option opens an Instance block. 
 
 Single-instance Plugin Config Example:
 -------
@@ -112,9 +112,9 @@ RDB Changes Since Last Save:
 Total Keys in db0:
 ![Total Keys in db0](https://github.com/zerthimon/redis_plugin/raw/master/screenshots/redis_db0_keys_total.png)
 
-Stats Example 1:
+Stats Example 1:  
 ![Stats Example 1](https://github.com/zerthimon/redis_plugin/raw/master/screenshots/stats_example1.png)
 
-Stats Example 2:
+Stats Example 2:  
 ![Stats Example 2](https://github.com/zerthimon/redis_plugin/raw/master/screenshots/stats_example2.png)
 
