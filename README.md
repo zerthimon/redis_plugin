@@ -7,11 +7,14 @@ Requirements:
 ------------
 
 *Redis*  
-This plugin requires an access to Redis.
-UNIX Domain socket and TCP/IP communication are supported.
+Read access to Redis' UNIX Domain socket or TCP port.
 
 *collectd*  
 Collectd must have the Python plugin installed. See (<https://collectd.org/wiki/index.php/Plugin:Python>)
+
+*Python 2.7*
+Plugin currently supports Python 2.7 (and probably a collectd Python plugin compiled with Pyhton 2.7).
+There are plans to rewrite the code to support Python 2.6.
 
 Options:
 -------
@@ -20,8 +23,8 @@ Options:
    Default: none  
 * `IP`  
    IP Address of the Redis instance.  
-   When specified together with Socket, takes over Socket option.
-   Default: 127.0.0.1
+   When specified together with Socket, takes over Socket option.  
+   Default: 127.0.0.1  
 * `Port`  
    TCP Port of the Redis instance.  
    Default: 6379  
