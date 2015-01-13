@@ -117,11 +117,11 @@ class RedisSocket(object):
             self.disconnect()
             if len(error.args) == 1:
                 raise ServerError("Error connecting to redis on %s: %s." % (self.endpoint,
-                                                                               error.args[0]))
+                                                                            error.args[0]))
             else:
                 raise ServerError("Error %s connecting to redis on %s: %s." % (error.args[0],
-                                                                                   self.endpoint, 
-                                                                                   error.args[1]))
+                                                                               self.endpoint,
+                                                                               error.args[1]))
         finally:
             if self._handler is not None:
                 if self.auth is not None:
@@ -153,11 +153,11 @@ class RedisSocket(object):
             self.disconnect()
             if len(error.args) == 1:
                 raise ServerError("Error sending data to redis on %s: %s" % (self.endpoint,
-                                                                                 error.args[0]))
+                                                                             error.args[0]))
             else:
                 raise ServerError("Error %s sending data to redis on %s: %s." % (error.args[0],
-                                                                                     self.endpoint,
-                                                                                     error.args[1]))
+                                                                                 self.endpoint,
+                                                                                 error.args[1]))
 
     def read_line(self):
         """ Read a line from redis and handle it according to message type """
@@ -168,11 +168,11 @@ class RedisSocket(object):
             self.disconnect()
             if len(error.args) == 1:
                 raise ServerError("Error reading data from redis on %s: %s" % (self.endpoint,
-                                                                                   error.args[0]))
+                                                                               error.args[0]))
             else:
                 raise ServerError("Error %s reading data from redis on %s: %s." % (error.args[0],
-                                                                                       self.endpoint,
-                                                                                       error.args[1]))
+                                                                                   self.endpoint,
+                                                                                   error.args[1]))
 
         if response[:-2] in ["$-1", "*-1"]:
             return None
@@ -191,11 +191,11 @@ class RedisSocket(object):
                 self.disconnect()
                 if len(error.args) == 1:
                     raise ServerError("Error reading data from redis on %s: %s" % (self.endpoint,
-                                                                                       error.args[0]))
+                                                                                   error.args[0]))
                 else:
                     raise ServerError("Error %s reading data from redis on %s: %s." % (error.args[0],
-                                                                                           self.endpoint,
-                                                                                           error.args[1]))
+                                                                                       self.endpoint,
+                                                                                       error.args[1]))
         else:
             raise RedisError("Unknown redis message type %s" % (msg_type))
 
