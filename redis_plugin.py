@@ -69,26 +69,22 @@ INFO_STATS_MAP = {
 
 METRIC_DELIM = '.'
 
-
 def logger(level, message):
     if level == 'err':
-        collectd.error('{}: {}'.format(NAME, message))
+        collectd.error("%s: %s" % (NAME, message))
     elif level == 'warn':
-        collectd.warning('{}: {}'.format(NAME, message))
+        collectd.warning("%s: %s" % (NAME, message))
     elif level == 'verb':
         if CONFIG_INSTANCES['root_config']['VERBOSE_LOGGING']:
-            collectd.info('{}: {}'.format(NAME, message))
+            collectd.info("%s: %s" % (NAME, message))
     else:
-        collectd.notice('{}: {}'.format(NAME, message))
-
+        collectd.notice("%s: %s" % (NAME, message))
 
 class RedisError(Exception):
     pass
 
-
 class ServerError(Exception):
     pass
-
 
 class RedisSocket(object):
     def __init__(self, socket_file=None, ip=None, port=None, auth=None):
@@ -110,7 +106,7 @@ class RedisSocket(object):
             if self.ip:
                 self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 self._socket.connect((self.ip, self.port))
-                self.endpoint = "{}:{}".format(self.ip, self.port)
+                self.endpoint = "%s:%s" % (self.ip, self.port)
             elif self.socket_file:
                 self._socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
                 self._socket.connect(self.socket_file)
@@ -120,16 +116,16 @@ class RedisSocket(object):
         except socket.error as error:
             self.disconnect()
             if len(error.args) == 1:
-                raise ServerError("Error connecting to redis on {}: {}".format(self.endpoint,
+                raise ServerError("Error connecting to redis on %s: %s." % (self.endpoint,
                                                                                error.args[0]))
             else:
-                raise ServerError("Error {} connecting to redis on {}: {}.".format(error.args[0],
+                raise ServerError("Error %s connecting to redis on %s: %s." % (error.args[0],
                                                                                    self.endpoint, 
                                                                                    error.args[1]))
         finally:
             if self._handler is not None:
                 if self.auth is not None:
-                    if not self.send_command("auth {}".format(self.auth)):
+                    if not self.send_command("auth %s" % (self.auth)):
                         self.disconnect()
                         raise RedisError('Redis plugin: AUTH command failed')
                 # issue an "empty" command to validate connection
@@ -156,10 +152,10 @@ class RedisSocket(object):
         except socket.error as error:
             self.disconnect()
             if len(error.args) == 1:
-                raise ServerError("Error sending data to redis on {}: {}".format(self.endpoint,
+                raise ServerError("Error sending data to redis on %s: %s" % (self.endpoint,
                                                                                  error.args[0]))
             else:
-                raise ServerError("Error {} sending data to redis on {}: {}.".format(error.args[0],
+                raise ServerError("Error %s sending data to redis on %s: %s." % (error.args[0],
                                                                                      self.endpoint,
                                                                                      error.args[1]))
 
@@ -171,10 +167,10 @@ class RedisSocket(object):
         except socket.error as error:
             self.disconnect()
             if len(error.args) == 1:
-                raise ServerError("Error reading data from redis on {}: {}".format(self.endpoint,
+                raise ServerError("Error reading data from redis on %s: %s" % (self.endpoint,
                                                                                    error.args[0]))
             else:
-                raise ServerError("Error {} reading data from redis on {}: {}.".format(error.args[0],
+                raise ServerError("Error %s reading data from redis on %s: %s." % (error.args[0],
                                                                                        self.endpoint,
                                                                                        error.args[1]))
 
@@ -194,14 +190,14 @@ class RedisSocket(object):
             except socket.error as error:
                 self.disconnect()
                 if len(error.args) == 1:
-                    raise ServerError("Error reading data from redis on {}: {}".format(self.endpoint,
+                    raise ServerError("Error reading data from redis on %s: %s" % (self.endpoint,
                                                                                        error.args[0]))
                 else:
-                    raise ServerError("Error {} reading data from redis on {}: {}.".format(error.args[0],
+                    raise ServerError("Error %s reading data from redis on %s: %s." % (error.args[0],
                                                                                            self.endpoint,
                                                                                            error.args[1]))
         else:
-            raise RedisError("Unknown redis message type {}".format(msg_type))
+            raise RedisError("Unknown redis message type %s" % (msg_type))
 
     def send_command(self, command):
         self.write_line(command)
@@ -222,7 +218,7 @@ def info2dict(info_lines):
             continue
 
         if ':' not in line:
-            logger('warn', "Bad format for info line: {}".format(line))
+            logger('warn', "Bad format for info line: %s" % (line))
             continue
 
         metric_name, metric_value = line.split(':')
@@ -269,22 +265,22 @@ def get_stats(config_data):
     try:
         redis.connect()
     except Exception as error:
-        logger('err', "Could not connect to redis: {}".format(error.message))
+        logger('err', "Could not connect to redis: %s" % (error.message))
         return collectd_stats
-    logger('verb', "Connected to redis on {}".format(redis.endpoint))
+    logger('verb', "Connected to redis on %s" % (redis.endpoint))
 
     logger('verb', "Sending 'INFO' command")
     try:
         data += redis.send_command('info')
     except Exception as error:
-        logger('err', "Error while sending 'INFO' command: {}".format(error.message))
+        logger('err', "Error while sending 'INFO' command: %s" % (error.message))
 
     if config_data['COMMANDSTATS']:
         logger('verb', "Sending 'INFO COMMANDSTATS' command")
         try:
             data += "\n" + redis.send_command('info commandstats')
         except Exception as error:
-            logger('err', "Error while sending 'INFO COMMANDSTATS' command: {}".format(error.message))
+            logger('err', "Error while sending 'INFO COMMANDSTATS' command: %s" % (error.message))
 
     metric_dict = info2dict(data)
 
@@ -333,7 +329,7 @@ def get_instance_config(config_child):
         elif node.key == "Instance":
             continue
         else:
-            logger('warn', 'Unknown config key: {}'.format(node.key))
+            logger('warn', "Unknown config key: %s" % (node.key))
     return instance_config
 
 
@@ -374,7 +370,7 @@ def read_callback():
         else:
             collectd_stats[instance_name] = get_stats(instance_config)
             if not collectd_stats[instance_name]:
-                logger('warn', "No data received from redis instance {}".format(instance_name))
+                logger('warn', "No data received from redis instance %s" % (instance_name))
 
     for instance_name, instance_data in collectd_stats.iteritems():
         for section_name, data_sets in instance_data.iteritems():
@@ -384,7 +380,7 @@ def read_callback():
                     metric_prefix = METRIC_DELIM.join([metric_prefix, instance_name])
                 metric_prefix = METRIC_DELIM.join([metric_prefix, section_name]) 
 
-                logger('verb', "dispatching values - plugin_name: {}, type: {}, values: {}".format(
+                logger('verb', "dispatching values - plugin_name: %s, type: %s, values: %s" % (
                     metric_prefix, data_set, ", ".join([str(i) for i in values])))
 
                 val = collectd.Values(plugin=metric_prefix.lower(), type=data_set)
